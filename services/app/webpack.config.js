@@ -13,6 +13,8 @@ const isProd = env === 'production';
 const commonPlugins = [
   new CopyWebpackPlugin([
     { from: 'assets/static' },
+    { from: 'assets/js/firebase-messaging-sw.js', to: '../' },
+    { from: 'assets/js/init-firebase.js' },
   ]),
   new webpack.ProvidePlugin({
     $: 'jquery',

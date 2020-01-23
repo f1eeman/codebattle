@@ -19,31 +19,41 @@ html lang="en"
     meta content="#ffffff" name="theme-color"
     link rel="stylesheet" href=static_path(@conn,"/assets/style.css")
     title Codebattle
+
     = unless @current_user.guest do
-      - app_id = "#{Application.get_env(:one_signal, OneSignal)[:app_id]}"
-      script async="async" src="https://cdn.onesignal.com/sdks/OneSignalSDK.js"
-      javascript:
-        var OneSignal = window.OneSignal || [];
-        OneSignal.push(function() {
-          OneSignal.init({
-            appId: `#{app_id}`,
-          });
-        });
-        OneSignal.push(function() {
-          OneSignal.sendTags({
-            userId: `#{@current_user.public_id}`
-          }).then(function(tagsSent) {
-          });
-        });
+      script defer="defer" src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"
+      script defer="defer" src="https://www.gstatic.com/firebasejs/7.7.0/firebase-messaging.js"
+      script defer="defer" src="/assets/init-firebase.js"
+
+      / - app_id = "#{Application.get_env(:one_signal, OneSignal)[:app_id]}"
+      / userId: `#{@current_user.public_id}`
+
+      / = render "firebase_cloudmessaging.html"
+
     /! Google Tag Manager
     javascript:
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src= 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-N6C9TFH');
     /! End Google Tag Manager
+
   body.position-relative
     /! Google Tag Manager (noscript)
     noscript
       iframe height="0" src="https://www.googletagmanager.com/ns.html?id=GTM-N6C9TFH" style="display:none;visibility:hidden" width="0"
     /! End Google Tag Manager (noscript)
+
+    .mdl-card.mdl-shadow--2dp.mdl-cell.mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--12-col-desktop
+      .mdl-card__supporting-text.mdl-color-text--grey-600
+        #token_div style=("display: none;")
+          h4 Instance ID Token
+          p#token style=("word-break: break-all;")
+          button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored onclick="deleteToken()"  Delete Token
+
+        #permission_div style=("display: none;")
+          h4 Needs Permission
+          p#token
+          button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored onclick="requestPermission()"  Request Permission
+        #messages
+
     .bg-white
       .container-fluid
         nav.navbar.navbar-expand-lg.navbar-light.row.border-bottom

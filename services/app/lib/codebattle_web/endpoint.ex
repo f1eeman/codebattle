@@ -13,7 +13,7 @@ defmodule CodebattleWeb.Endpoint do
     at: "/",
     from: :codebattle,
     gzip: false,
-    only: ~w(assets css fonts images js favicon.ico robots.txt)
+    only: ~w(assets css fonts images js favicon.ico robots.txt firebase-messaging-sw.js)
   )
 
   # Code reloading can be explicitly enabled under the
