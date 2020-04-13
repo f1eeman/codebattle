@@ -1,4 +1,4 @@
-defmodule Codebattle.AssertsImporter do
+defmodule Codebattle.Task.Importer do
   @moduledoc "Periodically import asserts from github/battle_asserts to database"
 
   # TODO: add tests, make code more pretty
