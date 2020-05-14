@@ -40,6 +40,8 @@ const RootContainer = ({
 
   const isStoredGame = gameStatusCode === GameStatusCodes.stored;
 
+  const isGameOver = gameStatusCode === GameStatusCodes.gameOver;
+
   return (
     <div className="x-outline-none">
       <div className="container-fluid">
@@ -48,7 +50,7 @@ const RootContainer = ({
           <GameWidget />
         </div>
       </div>
-      {isStoredGame && <CodebattlePlayer />}
+      {(isGameOver || isStoredGame) && <CodebattlePlayer /> }
     </div>
   );
 };
