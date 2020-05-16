@@ -153,12 +153,21 @@ class CodebattlePlayer extends Component {
     setReplayerModeOff();
   }
 
-  handleShowReplayer = ({ replayerMode, storedGameEditorReady }) => async () => {
+  handleShowReplayer = async () => {
+    const {
+      replayerMode, gameStatusCode, storedGameEditorReady, setReplayerModeOn,
+    } = this.props;
+
+    const isStoredGame = gameStatusCode === gameStatusCodes.stored;
+    const isGameOver = gameStatusCode === gameStatusCodes.gameOver;
     const isReplayerModeInitialized = replayerMode !== replayerModes.none;
-    if (!isReplayerModeInitialized) {
+
+    if (!isReplayerModeInitialized && isStoredGame) {
       await storedGameEditorReady();
     }
-    const { setReplayerModeOn } = this.props;
+    if (!isReplayerModeInitialized && isGameOver) {
+      // загрузку живой игры сделать
+    }
     setReplayerModeOn();
   }
 
@@ -259,60 +268,69 @@ class CodebattlePlayer extends Component {
     if (isStoreLoaded) {
       return null;
     }
-    const { replayerMode, gameStatusCode, storedGameEditorReady } = this.props;
+    const { replayerMode, gameStatusCode } = this.props;
 
     const isStoredGame = gameStatusCode === gameStatusCodes.stored;
     const isGameOver = gameStatusCode === gameStatusCodes.gameOver;
-    const isReplayerModeOff = replayerMode !== replayerModes.on;
     const isReplayerModeOn = replayerMode === replayerModes.on;
 
     return (
-      <>
-        <div className="py-4" />
-        <div className="container-fluid fixed-bottom my-1 px-1">
-          <div className="border bg-light py-2">
-            <div className="row align-items-center d-flex">
-              {(isGameOver || isStoredGame)
-                && isReplayerModeOff
-                && (
-                <button type="button" className="btn btn-info cb-replayer-button ml-4" onClick={this.handleShowReplayer({ replayerMode, storedGameEditorReady })}>
-                  Show replayer
-                </button>
-                )}
-              {isReplayerModeOn
-                && (
-                <>
-                  <button type="button" className="btn btn-info cb-replayer-button ml-4" onClick={this.handleHideReplayer}>Hide replayer</button>
-                  <ControlPanel
-                    onPlayClick={this.onPlayClick}
-                    onPauseClick={this.onPauseClick}
-                    defaultSpeed={defaultSpeed}
-                    setSpeed={this.setSpeed}
-                    isStop={isStop}
-                  >
-                    <Slider
-                      className="cb-slider col-md-7 ml-1"
-                      isEnabled={isEnabled}
-                      direction={direction}
-                      onChange={value => this.onSliderHandleChange(value)}
-                      onChangeStart={this.onSliderHandleChangeStart}
-                      onChangeEnd={this.onSliderHandleChangeEnd}
-                      onIntent={intent => this.onSliderHandleChangeIntent(intent)}
-                      onIntentEnd={this.onSliderHandleChangeIntentEnd}
-                    >
-                      <CodebattleSliderBar
-                        value={currentValue}
-                        lastIntent={lastIntent}
-                        isHold={isHold}
-                      />
-                    </Slider>
-                  </ControlPanel>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </>
+      (isGameOver || isStoredGame)
+       && (
+       <>
+         <div className="py-4" />
+         <div className="container-fluid fixed-bottom my-1 px-1">
+           <div className="border bg-light">
+             <div className="row align-items-center d-flex ml-1">
+               { (!isReplayerModeOn)
+                 ? (
+                   <button
+                     type="button"
+                     className="btn btn-info cb-replayer-button"
+                     onClick={this.handleShowReplayer}
+                   >
+                     Show replayer
+                   </button>
+                 ) : (
+                   <>
+                     <button
+                       type="button"
+                       className="btn btn-info cb-replayer-button"
+                       onClick={this.handleHideReplayer}
+                     >
+                       Hide replayer
+                     </button>
+                     <ControlPanel
+                       onPlayClick={this.onPlayClick}
+                       onPauseClick={this.onPauseClick}
+                       defaultSpeed={defaultSpeed}
+                       setSpeed={this.setSpeed}
+                       isStop={isStop}
+                     >
+                       <Slider
+                         className="cb-slider col-md-7 ml-1"
+                         isEnabled={isEnabled}
+                         direction={direction}
+                         onChange={value => this.onSliderHandleChange(value)}
+                         onChangeStart={this.onSliderHandleChangeStart}
+                         onChangeEnd={this.onSliderHandleChangeEnd}
+                         onIntent={intent => this.onSliderHandleChangeIntent(intent)}
+                         onIntentEnd={this.onSliderHandleChangeIntentEnd}
+                       >
+                         <CodebattleSliderBar
+                           value={currentValue}
+                           lastIntent={lastIntent}
+                           isHold={isHold}
+                         />
+                       </Slider>
+                     </ControlPanel>
+                   </>
+                 )}
+             </div>
+           </div>
+         </div>
+       </>
+       )
     );
   }
 }

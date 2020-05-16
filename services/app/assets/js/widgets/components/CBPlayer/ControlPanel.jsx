@@ -65,7 +65,7 @@ const ControlPanel = ({
         onClick={onControlButtonClick}
       >
         {mode === modes.pause ? (
-          <PlayerIcon.Play width={32} height={32} />
+          <PlayerIcon.Play width={23} height={23} />
         ) : (
           <PlayerIcon.Pause width={23} height={23} />
         )}

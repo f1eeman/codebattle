@@ -11,7 +11,6 @@ import ExecutionOutput from '../components/ExecutionOutput/ExecutionOutput';
 import NotificationsHandler from './NotificationsHandler';
 import editorModes from '../config/editorModes';
 import GameStatusCodes from '../config/gameStatusCodes';
-import replayerModes from '../config/replayerModes';
 
 class GameWidget extends Component {
   static defaultProps = {
@@ -73,13 +72,12 @@ class GameWidget extends Component {
 
   render() {
     const {
-      isStoredGame, leftEditor, rightEditor, leftOutput, rightOutput, replayerMode,
+      isStoredGame, leftEditor, rightEditor, leftOutput, rightOutput,
     } = this.props;
     if (leftEditor === null || rightEditor === null) {
       // FIXME: render loader
       return null;
     }
-    const isReplayerModeNone = replayerMode === replayerModes.none;
     return (
       <>
         <div className="col-12 col-md-6 p-1">
@@ -87,9 +85,7 @@ class GameWidget extends Component {
             <LeftEditorToolbar />
             <Editor {...this.getLeftEditorParams()} />
             {/* TODO: move state to parent component */}
-            { (!isStoredGame || !isReplayerModeNone)
-            && this.renderGameActionButtons(leftEditor, false) }
-
+            { !isStoredGame && this.renderGameActionButtons(leftEditor, false) }
             <ExecutionOutput output={leftOutput} id="1" />
           </div>
         </div>
@@ -98,9 +94,7 @@ class GameWidget extends Component {
             <RightEditorToolbar />
             <Editor {...this.getRightEditorParams()} />
             {/* TODO: move state to parent component */}
-            { (!isStoredGame || !isReplayerModeNone)
-            && this.renderGameActionButtons(rightEditor, true) }
-
+            { !isStoredGame && this.renderGameActionButtons(rightEditor, true) }
             <ExecutionOutput output={rightOutput} id="2" />
           </div>
         </div>
@@ -128,7 +122,6 @@ const mapStateToProps = state => {
     leftEditorsMode: selectors.editorsModeSelector(leftUserId)(state),
     theme: selectors.editorsThemeSelector(leftUserId)(state),
     isStoredGame: selectors.gameStatusSelector(state).status === GameStatusCodes.stored,
-    replayerMode: selectors.replayerModeSelector(state),
   };
 };
 

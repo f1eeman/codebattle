@@ -38,10 +38,6 @@ const RootContainer = ({
     return <WaitingOpponentInfo gameUrl={gameUrl} />;
   }
 
-  const isStoredGame = gameStatusCode === GameStatusCodes.stored;
-
-  const isGameOver = gameStatusCode === GameStatusCodes.gameOver;
-
   return (
     <div className="x-outline-none">
       <div className="container-fluid">
@@ -50,7 +46,7 @@ const RootContainer = ({
           <GameWidget />
         </div>
       </div>
-      {(isGameOver || isStoredGame) && <CodebattlePlayer /> }
+      <CodebattlePlayer />
     </div>
   );
 };
