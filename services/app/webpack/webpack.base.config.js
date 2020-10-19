@@ -1,11 +1,11 @@
-const path = require('path');
-const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require("path");
+const webpack = require("webpack");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const env = process.env.NODE_ENV || 'development';
-const isProd = env === 'production';
+const env = process.env.NODE_ENV || "development";
+const isProd = env === "production";
 
 function recursiveIssuer(m) {
   if (m.issuer) {
@@ -19,29 +19,29 @@ function recursiveIssuer(m) {
 
 module.exports = {
   entry: {
-    app: ['./assets/js/app.js', './assets/css/style.scss'],
-    landing: ['./assets/js/app.js', './assets/css/landing.scss'],
+    app: ["./assets/js/app.js", "./assets/css/style.scss"],
+    landing: ["./assets/js/landing.js", "./assets/css/landing.scss"],
   },
   output: {
-    path: path.resolve(__dirname, '../priv/static/assets'),
-    filename: '[name].js',
-    sourceMapFilename: '[name].js.map',
-    publicPath: '/assets/',
+    path: path.resolve(__dirname, "../priv/static/assets"),
+    filename: "[name].js",
+    sourceMapFilename: "[name].js.map",
+    publicPath: "/assets/",
   },
   externals: {
-    gon: 'Gon',
+    gon: "Gon",
   },
   module: {
     rules: [
       {
         test: /\.po$/,
-        loaders: ['i18next-po-loader'],
+        loaders: ["i18next-po-loader"],
       },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
         },
       },
       {
@@ -53,13 +53,13 @@ module.exports = {
               hmr: !isProd,
             },
           },
-          { loader: 'css-loader' },
-          { loader: 'sass-loader' },
+          { loader: "css-loader" },
+          { loader: "sass-loader" },
         ],
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
-        use: 'url-loader',
+        use: "url-loader",
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
@@ -77,18 +77,18 @@ module.exports = {
   optimization: {
     splitChunks: {
       cacheGroups: {
-        fooStyles: {
-          name: 'app',
-          test: (m, c, entry = 'app') =>
-            m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
-          chunks: 'all',
+        appStyles: {
+          name: "app",
+          test: (m, c, entry = "app") =>
+            m.constructor.name === "CssModule" && recursiveIssuer(m) === entry,
+          chunks: "all",
           enforce: true,
         },
-        barStyles: {
-          name: 'landing',
-          test: (m, c, entry = 'landing') =>
-            m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
-          chunks: 'all',
+        landingStyles: {
+          name: "landing",
+          test: (m, c, entry = "landing") =>
+            m.constructor.name === "CssModule" && recursiveIssuer(m) === entry,
+          chunks: "all",
           enforce: true,
         },
       },
@@ -96,27 +96,27 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [{ from: 'assets/static' }],
+      patterns: [{ from: "assets/static" }],
     }),
     new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.jQuery': 'jquery',
-      Popper: ['popper.js', 'default'],
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery",
+      Popper: ["popper.js", "default"],
     }),
     new MonacoWebpackPlugin({
       languages: [
-        'ruby',
-        'javascript',
-        'typescript',
-        'python',
-        'clojure',
-        'php',
-        'go',
+        "ruby",
+        "javascript",
+        "typescript",
+        "python",
+        "clojure",
+        "php",
+        "go",
       ],
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
+      filename: "[name].css",
     }),
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /(en|ru)$/),
   ],
@@ -125,6 +125,6 @@ module.exports = {
     poll: 1000,
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: [".js", ".jsx"],
   },
 };
