@@ -59,18 +59,14 @@ export const secondEditorSelector = state => {
 export const leftEditorSelector = state => {
   const currentUserId = currentUserIdSelector(state);
   const player = _.get(gamePlayersSelector(state), currentUserId, false);
-  const editorSelector = !!player && player.type === userTypes.secondPlayer
-      ? secondEditorSelector
-      : firstEditorSelector;
+  const editorSelector = !!player && player.type === userTypes.secondPlayer ? secondEditorSelector : firstEditorSelector;
   return editorSelector(state);
 };
 
 export const rightEditorSelector = state => {
   const currentUserId = currentUserIdSelector(state);
   const player = _.get(gamePlayersSelector(state), currentUserId, false);
-  const editorSelector = !!player && player.type === userTypes.secondPlayer
-      ? firstEditorSelector
-      : secondEditorSelector;
+  const editorSelector = !!player && player.type === userTypes.secondPlayer ? firstEditorSelector : secondEditorSelector;
   return editorSelector(state);
 };
 
@@ -160,13 +156,18 @@ export const editorsThemeSelector = currentUserId => state => {
   return EditorThemes.dark;
 };
 
-export const playbookStatusSelector = state => state.playbook.status;
+export const gameSessionStatusSelector = state => state.gameSession.status;
 
-export const playbookInitRecordsSelector = state => state.playbook.initRecords;
+export const gameSessionInitRecordsSelector = state => state.gameSession.initRecords;
 
-export const playbookRecordsSelector = state => state.playbook.records;
+export const gameSessionRecordsSelector = state => state.gameSession.records;
 
-export const stepCoefficientSelector = state => state.playbook.stepCoefficient;
+export const gameReplayPlayerSelector = state => state.gameSession.replayPlayer;
+
+export const stepCoefficientSelector = state => {
+  const { replayPlayer } = state.gameSession;
+  return replayPlayer.stepCoefficient;
+};
 
 export const gameListSelector = state => state.gameList;
 

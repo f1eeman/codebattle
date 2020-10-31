@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useHotkeys } from 'react-hotkeys-hook';
+import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+
 import Gon from 'gon';
-import GameWidget from './GameWidget';
-import InfoWidget from './InfoWidget';
-import userTypes from '../config/userTypes';
+
 import { actions } from '../slices';
+import { gameStatusSelector } from '../selectors';
 import * as GameActions from '../middlewares/Game';
 import GameStatusCodes from '../config/gameStatusCodes';
-import { gameStatusSelector } from '../selectors';
+import GameWidget from './GameWidget';
+import InfoWidget from './InfoWidget';
 import WaitingOpponentInfo from '../components/WaitingOpponentInfo';
-import CodebattlePlayer from './CodebattlePlayer';
+import userTypes from '../config/userTypes';
 
 const RootContainer = ({
-  storeLoaded, gameStatusCode, checkResult, init, setCurrentUser,
+ storeLoaded, gameStatusCode, checkResult, init, setCurrentUser,
 }) => {
   useEffect(() => {
     const user = Gon.getAsset('current_user');
@@ -23,10 +24,15 @@ const RootContainer = ({
     init();
   }, [init, setCurrentUser]);
 
-  useHotkeys('ctrl+enter, command+enter', e => {
-    e.preventDefault();
-    checkResult();
-  }, [], { filter: () => true });
+  useHotkeys(
+    'ctrl+enter, command+enter',
+    e => {
+      e.preventDefault();
+      checkResult();
+    },
+    [],
+    { filter: () => true },
+  );
 
   if (!storeLoaded) {
     // TODO: add loader
@@ -38,8 +44,6 @@ const RootContainer = ({
     return <WaitingOpponentInfo gameUrl={gameUrl} />;
   }
 
-  const isStoredGame = gameStatusCode === GameStatusCodes.stored;
-
   return (
     <div className="x-outline-none">
       <div className="container-fluid">
@@ -48,7 +52,6 @@ const RootContainer = ({
           <GameWidget />
         </div>
       </div>
-      {isStoredGame && <CodebattlePlayer />}
     </div>
   );
 };

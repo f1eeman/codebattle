@@ -5,9 +5,9 @@ import usersInfo, { actions as usersInfoActions } from './usersInfo';
 import editorUI, { actions as editorUIActions } from './editorUI';
 import gameUI, { actions as gameUIActions } from './gameUI';
 import executionOutput, { actions as executionOutputActions } from './executionOutput';
-import playbook, { actions as playbookActions } from './playbook';
 import game, { actions as gameActions } from './game';
 import gameList, { actions as gameListActions } from './gameList';
+import gameSession, { actions as gameSessionActions } from './gameSession';
 import user, { actions as userActions } from './user';
 
 const setError = error => ({
@@ -23,7 +23,7 @@ export const actions = {
   ...gameActions,
   ...storeLoadedActions,
   ...executionOutputActions,
-  ...playbookActions,
+  ...gameSessionActions,
   ...usersInfoActions,
   ...editorUIActions,
   ...gameUIActions,
@@ -41,7 +41,7 @@ export default {
   editor,
   editorUI,
   gameUI,
-  playbook,
+  gameSession,
   user,
   chat,
   gameList,

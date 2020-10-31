@@ -8,7 +8,7 @@ import userTypes from '../config/userTypes';
 import { actions, redirectToNewGame } from '../slices';
 
 import { resolveDiffs } from '../lib/player';
-import PlaybookStatusCodes from '../config/playbookStatusCodes';
+// import GameSessionStatusCodes from '../config/gameSessionStatusCodes';
 import GameStatusCodes from '../config/gameStatusCodes';
 
 const defaultLanguages = Gon.getAsset('langs');
@@ -57,9 +57,8 @@ const initStore = dispatch => ({
   task,
   langs,
   gameStatus,
-  playbookStatusCode,
+  // recordStatus
 }) => {
-  const isStored = playbookStatusCode === PlaybookStatusCodes.stored;
   const players = [{ ...firstPlayer, type: userTypes.firstPlayer }];
 
   if (secondPlayer) {
@@ -69,7 +68,7 @@ const initStore = dispatch => ({
   dispatch(actions.setLangs({ langs }));
   dispatch(actions.updateGamePlayers({ players }));
 
-  const updateEditorTextAction = isStored
+  const updateEditorTextAction = isRecord
     ? actions.updateEditorTextPlaybook
     : actions.updateEditorText;
 
@@ -119,7 +118,7 @@ const initGameChannel = dispatch => {
       task,
       langs,
       gameStatus,
-      playbookStatusCode: PlaybookStatusCodes.active,
+      // recordStatus: GameSessionStatusCodes.inProcess,
     });
 
     dispatch(actions.finishStoreInit());
@@ -305,10 +304,10 @@ export const storedGameEditorReady = () => dispatch => {
         secondPlayer: resolvedData.players[1],
         task: resolvedData.task,
         gameStatus,
-        playbookStatusCode: PlaybookStatusCodes.stored,
+        // recordStatus: GameSessionStatusCodes.recorded,
       });
 
-      dispatch(actions.loadStoredPlaybook(resolvedData));
+      dispatch(actions.loadGameSessionOnStore(resolvedData));
       dispatch(actions.fetchChatData(resolvedData.chat));
       dispatch(actions.finishStoreInit());
     })
