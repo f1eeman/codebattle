@@ -49,9 +49,6 @@ module.exports = {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: !isProd,
-            },
           },
           { loader: 'css-loader' },
           { loader: 'sass-loader' },

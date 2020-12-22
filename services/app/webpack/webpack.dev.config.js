@@ -1,13 +1,13 @@
-const webpack = require('webpack');
-const { merge } = require('webpack-merge');
-const baseWebpackConfig = require('./webpack.base.config');
+const webpack = require("webpack");
+const { merge } = require("webpack-merge");
+const baseWebpackConfig = require("./webpack.base.config");
 
 const devWebpackConfig = merge(baseWebpackConfig, {
-  mode: 'development',
-  devtool: 'eval-cheap-module-source-map',
+  mode: "development",
+  devtool: "eval-cheap-module-source-map",
   devServer: {
     writeToDisk: true,
-    publicPath: '/assets',
+    publicPath: "/assets",
     overlay: {
       // warnings: true,
       errors: true,
@@ -15,11 +15,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   },
   plugins: [
     new webpack.SourceMapDevToolPlugin({
-      filename: '[file].map',
+      filename: "[file].map",
     }),
+    new webpack.HotModuleReplacementPlugin(),
   ],
 });
 
-module.exports = new Promise(resolve => {
+module.exports = new Promise((resolve) => {
   resolve(devWebpackConfig);
 });
